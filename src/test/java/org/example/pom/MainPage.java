@@ -37,9 +37,11 @@ public class MainPage {
     @FindBy(css = ".text-span.svelte-b5t5jw")
     private WebElement accountsCount;
 
+    @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[1]/button")
+    private WebElement closeModal;
 
-    @FindBy(css = ".mdc-data-table__row")
-    private List<WebElement> students;
+    @FindBy(xpath = "/html/body/div/main/div/div/div[4]/div[2]/div/div[1]/div/div[1]/table/tbody/tr[1]/td[4]")
+    private By studentStatus;
 
     @FindBy(css = ".material-icons.mdc-icon-button.mdc-icon-button--display-flex.smui-icon-button--size-button.mdc-icon-button--reduced-size.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded")
     private WebElement deleteRestoreButton;
@@ -49,6 +51,12 @@ public class MainPage {
 
     @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[2]/div/form/div[2]/button")
     private WebElement submitButtonOnModalWindow2;
+
+    @FindBy(xpath = "/html/body/div/main/div/div/div[1]/div[1]/table/tbody/tr[1]/td[4]/button[3]")
+    private WebElement zoomIn;
+
+    @FindBy(css = ".mdc-data-table__row")
+    private List<WebElement> rows;
 
     public MainPage(WebDriver driver, WebDriverWait wait) {
         this.wait = wait;
@@ -100,6 +108,7 @@ public class MainPage {
 
     public int getInitialValue() {
         return Integer.parseInt(wait.until(ExpectedConditions.visibilityOf(accountsCount)).getText());
+
     }
 
     public int getCurrentValue() {
@@ -108,15 +117,21 @@ public class MainPage {
 
     public void addOneStudentAndCheck() {
         int initialValue = getInitialValue();
+        System.out.println(initialValue);
 
         addOneStudent();
 
+        // Ждем, пока значение увеличится
+        wait.until(ExpectedConditions.textToBePresentInElement(accountsCount, String.valueOf(initialValue + 1)));
+
         int newValue = getCurrentValue();
+        System.out.println(getCurrentValue());
         if (newValue != initialValue + 1) {
             String message = "Value did not increase by 1. Initial: " + initialValue + ", After: " + newValue;
             processErrorMessage(message);
         }
     }
+
     // устанавливаем значение в поле errorMessage
     public void processErrorMessage(String message) {
         this.errorMessage = message;
@@ -131,33 +146,37 @@ public class MainPage {
 //        wait.until(ExpectedConditions.visibilityOf(buttonCountUp)).click();
         wait.until(ExpectedConditions.visibilityOf(newNumberInput)).sendKeys(String.valueOf(1));
         submitButtonOnModalWindow2.click();
+        closeModal.click();
     }
 
     public void performTask() {
+        wait.until(ExpectedConditions.visibilityOf(zoomIn)).click();
+
+        // Считываем и проверяем начальный статус (должен быть "active")
+        String initialStatus = getStudentStatus();
+        Assertions.assertEquals("active", initialStatus, "Unexpected initial status");
+
         // Кликаем на иконку удаления для первого студента
         wait.until(ExpectedConditions.visibilityOf(deleteRestoreButton)).click();
 
-        // Проверяем, как изменился его статус (должен смениться на block)
-        String initialStatus = getStudentStatus(0);
-        System.out.println("Initial status: " + initialStatus);
-
-        // Проверяем, что статус после удаления совпадает с ожидаемым (например, block)
-        Assertions.assertEquals("block", initialStatus, "Unexpected initial status after deletion");
+        // После удаления считываем и проверяем статус (должен быть "block")
+        String blockStatus = getStudentStatus();
+        Assertions.assertEquals("block", blockStatus, "Unexpected status after deletion");
 
         // Кликаем на иконку восстановления для той же строки
         wait.until(ExpectedConditions.visibilityOf(deleteRestoreButton)).click();
 
-        // Проверяем, что статус снова поменялся (должен смениться на active)
-        String newStatus = getStudentStatus(0);
-        System.out.println("New status: " + newStatus);
-
-        // Проверяем, что статус после восстановления совпадает с ожидаемым (например, active)
-        Assertions.assertEquals("active", newStatus, "Unexpected new status after restoration");
+        // После восстановления считываем и проверяем статус (должен быть "active")
+        String restoredStatus = getStudentStatus();
+        Assertions.assertEquals("active", restoredStatus, "Unexpected status after restoration");
     }
 
-    private String getStudentStatus(int index) {
-        // Проверяем, как изменился статус студента по индексу
-        WebElement studentRow = students.get(index);
-        return studentRow.findElement(By.cssSelector(".mdc-data-table__cell")).getText();
+    private String getStudentStatus() {
+        // Проверяем, как изменился статус
+        WebElement firstRow = rows.get(0);
+        return firstRow.findElement(studentStatus).getText();
     }
+
+
+
 }
