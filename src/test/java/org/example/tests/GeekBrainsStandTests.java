@@ -43,7 +43,7 @@ public class GeekBrainsStandTests {
         driver = new FirefoxDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         // Растягиваем окно браузера на весь экран
-//        driver.manage().window().maximize();
+       driver.manage().window().maximize();
         // Навигация на https://test-stand.gb.ru/login
         driver.get("https://test-stand.gb.ru/login");
         // Объект созданного Page Object

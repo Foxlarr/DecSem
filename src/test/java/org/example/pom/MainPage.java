@@ -32,8 +32,8 @@ public class MainPage {
     private List<WebElement> rowsInGroupTable;
     @FindBy(xpath = "/html/body/div/main/div/div/div[1]/div[1]/table/tbody/tr[1]/td[4]/button[1]/i")
     private WebElement studentAddButton;
-//    @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[2]/div/form/div[1]/label/input")
-//    private  WebElement buttonCountUp;
+    @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[2]/div/form/div[1]/label/input")
+    private  WebElement buttonCountUp;
     @FindBy(css = ".text-span.svelte-b5t5jw")
     private WebElement accountsCount;
 
@@ -44,8 +44,11 @@ public class MainPage {
     @FindBy(css = ".material-icons.mdc-icon-button.mdc-icon-button--display-flex.smui-icon-button--size-button.mdc-icon-button--reduced-size.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded")
     private WebElement deleteRestoreButton;
 
-    @FindBy(css = "input.mdc-text-field__input")
+    @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[2]/div/form/div[1]/label/input")
     private WebElement newNumberInput;
+
+    @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[2]/div/form/div[2]/button")
+    private WebElement submitButtonOnModalWindow2;
 
     public MainPage(WebDriver driver, WebDriverWait wait) {
         this.wait = wait;
@@ -125,8 +128,9 @@ public class MainPage {
 
     public void addOneStudent() {
         wait.until(ExpectedConditions.visibilityOf(studentAddButton)).click();
+//        wait.until(ExpectedConditions.visibilityOf(buttonCountUp)).click();
         wait.until(ExpectedConditions.visibilityOf(newNumberInput)).sendKeys(String.valueOf(1));
-        submitButtonOnModalWindow.click();
+        submitButtonOnModalWindow2.click();
     }
 
     public void performTask() {
