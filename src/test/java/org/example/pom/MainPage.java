@@ -30,7 +30,7 @@ public class MainPage {
     private WebElement closeCreateGroupIcon;
     @FindBy(xpath = "//table[@aria-label='Tutors list']/tbody/tr")
     private List<WebElement> rowsInGroupTable;
-    @FindBy(xpath = "@FindBy(css = \"i.mdc-button__icon[aria-hidden=true]\")")
+    @FindBy(xpath = "/html/body/div/main/div/div/div[1]/div[1]/table/tbody/tr[1]/td[4]/button[1]/i")
     private WebElement studentAddButton;
 //    @FindBy(xpath = "/html/body/div/main/div/div/div[3]/div[2]/div/div[2]/div/form/div[1]/label/input")
 //    private  WebElement buttonCountUp;
