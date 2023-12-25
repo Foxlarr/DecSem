@@ -3,7 +3,7 @@ package org.example.pom.elements;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Selenide.$;
+
 
 public class GroupTableRow {
 
@@ -22,13 +22,13 @@ public class GroupTableRow {
     }
 
     public void clickTrashIcon() {
-        root.$("td button").shouldHave(Condition.text("delete")).click();
-        root.$("td button").shouldHave(Condition.text("restore_from_trash")).shouldBe(Condition.visible);
+        root.$$("td button").findBy(Condition.text("delete")).click();
+        root.$$("td button").findBy(Condition.text("restore_from_trash")).shouldBe(Condition.visible);
     }
 
     public void clickRestoreFromTrashIcon() {
-        root.$("td button").shouldHave(Condition.text("restore_from_trash")).click();
-        root.$("td button").shouldHave(Condition.text("delete")).shouldBe(Condition.visible);
+        root.$$("td button").findBy(Condition.text("restore_from_trash")).click();
+        root.$$("td button").findBy(Condition.text("delete")).shouldBe(Condition.visible);
     }
 
     public void clickAddStudentsIcon() {
