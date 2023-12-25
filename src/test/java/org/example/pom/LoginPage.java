@@ -1,29 +1,14 @@
 package org.example.pom;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
 
-    private final WebDriverWait wait;
-
-    @FindBy(css="form#login input[type='text']")
-    private WebElement usernameField;
-    @FindBy(css="form#login input[type='password']")
-    private WebElement passwordField;
-    @FindBy(css="form#login button")
-    private WebElement loginButton;
-    @FindBy(css = "div.error-block")
-    private WebElement errorBlock;
-
-    public LoginPage(WebDriver driver, WebDriverWait wait) {
-        PageFactory.initElements(driver, this);
-        this.wait = wait;
-    }
+    private final SelenideElement usernameField = $("form#login input[type='text']");
+    private final SelenideElement passwordField = $("form#login input[type='password']");
+    private final SelenideElement loginButton = $("form#login button");
+    private final SelenideElement errorBlock = $("div.error-block");
 
     public void login(String username, String password) {
         typeUsernameInField(username);
@@ -32,20 +17,19 @@ public class LoginPage {
     }
 
     public void typeUsernameInField(String username) {
-        wait.until(ExpectedConditions.visibilityOf(usernameField)).sendKeys(username);
+        usernameField.setValue(username);
     }
 
     public void typePasswordInField(String password) {
-        wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(password);
+        passwordField.setValue(password);
     }
 
     public void clickLoginButton() {
-        wait.until(ExpectedConditions.visibilityOf(loginButton)).click();
+        loginButton.click();
     }
 
     public String getErrorBlockText() {
-        return wait.until(ExpectedConditions.visibilityOf(errorBlock))
-                .getText().replace("\n", " ");
+        return errorBlock.getText().replace("\n", " ");
     }
 
 }

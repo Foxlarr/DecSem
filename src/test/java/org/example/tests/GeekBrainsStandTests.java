@@ -8,8 +8,7 @@ import org.example.pom.ProfilePage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 
@@ -33,11 +32,10 @@ public class GeekBrainsStandTests {
     public void setupTest() {
         // Навигация на https://test-stand.gb.ru/login с помощью Selenide
         Selenide.open("https://test-stand.gb.ru/login");
-        // Сохраняем WebDriver из Selenide
-        WebDriver driver = WebDriverRunner.getWebDriver();
         // Объект созданного Page Object
-        loginPage = new LoginPage(driver, new WebDriverWait(driver, Duration.ofSeconds(30)));
+        loginPage = new LoginPage();
     }
+
 
     @Test
     public void testLoginWithEmptyFields() {
@@ -124,7 +122,7 @@ public class GeekBrainsStandTests {
 
     @AfterEach
     public void teardown() {
-        // Закрываем все окна брайзера и процесс драйвера
+        // Закрываем все окна браузера и процесс драйвера
         WebDriverRunner.closeWebDriver();
     }
 

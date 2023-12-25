@@ -2,23 +2,17 @@ package org.example.pom;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.example.pom.elements.GroupTableRow;
 import org.example.pom.elements.StudentTableRow;
-import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.value;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class MainPage {
 
-    @FindBy(css = "nav li.mdc-menu-surface--anchor a")
-    private SelenideElement usernameLinkInNavBar;
-    @FindBy(xpath = "//nav//li[contains(@class,'mdc-menu-surface--anchor')]//span[text()='Profile']")
-    private SelenideElement profileLinkInNavBar;
+    private final SelenideElement usernameLinkInNavBar = $("nav li.mdc-menu-surface--anchor a");
+    private final SelenideElement profileLinkInNavBar = $x("//nav//li[contains(@class,'mdc-menu-surface--anchor')]//span[text()='Profile']");
     private final SelenideElement createGroupButton = $("#create-btn");
     private final SelenideElement groupNameField = $x("//form//span[contains(text(), 'Group name')]/following-sibling::input");
     private final SelenideElement submitButtonOnModalWindow = $("form div.submit button");
@@ -31,26 +25,26 @@ public class MainPage {
     private final ElementsCollection rowsInStudentTable = $$x("//table[@aria-label='User list']/tbody/tr");
 
     public SelenideElement waitAndGetGroupTitleByText(String title) {
-        return $x(String.format("//table[@aria-label='Tutors list']/tbody//td[text()='%s']", title)).shouldBe(visible);
+        return $x(String.format("//table[@aria-label='Tutors list']/tbody//td[text()='%s']", title)).shouldBe(Condition.visible);
     }
 
     public void createGroup(String groupName) {
-        createGroupButton.shouldBe(visible).click();
-        groupNameField.shouldBe(visible).setValue(groupName);
-        submitButtonOnModalWindow.shouldBe(visible).click();
+        createGroupButton.shouldBe(Condition.visible).click();
+        groupNameField.shouldBe(Condition.visible).setValue(groupName);
+        submitButtonOnModalWindow.shouldBe(Condition.visible).click();
         waitAndGetGroupTitleByText(groupName);
     }
 
     public void closeCreateGroupModalWindow() {
-        closeCreateGroupIcon.shouldBe(visible).click();
+        closeCreateGroupIcon.shouldBe(Condition.visible).click();
     }
 
     public void typeAmountOfStudentsInCreateStudentsForm(int amount) {
-        createStudentsFormInput.shouldBe(visible).setValue(String.valueOf(amount));
+        createStudentsFormInput.shouldBe(Condition.visible).setValue(String.valueOf(amount));
     }
 
     public void clickSaveButtonOnCreateStudentsForm() {
-        saveCreateStudentsForm.shouldBe(visible).click();
+        saveCreateStudentsForm.shouldBe(Condition.visible).click();
     }
 
     public void closeCreateStudentsModalWindow() {
@@ -58,15 +52,15 @@ public class MainPage {
     }
 
     public void clickUsernameLabel() {
-        usernameLinkInNavBar.shouldBe(visible).click();
+        usernameLinkInNavBar.shouldBe(Condition.visible).click();
     }
 
     public void clickProfileLink() {
-        profileLinkInNavBar.shouldBe(visible).click();
+        profileLinkInNavBar.shouldBe(Condition.visible).click();
     }
 
     public String getUsernameLabelText() {
-        return usernameLinkInNavBar.shouldBe(visible).getText().replace("\n", " ");
+        return usernameLinkInNavBar.shouldBe(Condition.visible).getText().replace("\n", " ");
     }
 
     // Group Table Section
