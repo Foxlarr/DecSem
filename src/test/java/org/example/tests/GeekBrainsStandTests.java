@@ -1,5 +1,6 @@
 package org.example.tests;
 
+import com.codeborne.selenide.*;
 import org.example.pom.LoginPage;
 import org.example.pom.MainPage;
 import org.junit.jupiter.api.AfterEach;
@@ -16,10 +17,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.io.IOException;
-import java.lang.module.Configuration;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -32,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class GeekBrainsStandTests {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     private WebDriverWait wait;
     private LoginPage loginPage;
     private MainPage mainPage;
@@ -41,31 +43,29 @@ public class GeekBrainsStandTests {
     private static String PASSWORD;
 
     @BeforeAll
-    public static void setupClass() {
-//        Configuration.browser = "gecko";
-//        Configuration.remote = "http://localhost:4444/wd/hub";
-        // Помещаем в переменные окружения путь до драйвера
+    public static void setupClass() throws MalformedURLException {
+
+       Configuration.remote = "http://localhost:4444/wd/hub";
+       Configuration.browser = "firefox";
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setBrowserName("firefox");
+        capabilities.setVersion("latest");
+        capabilities.setCapability("enableVNC", true);
+
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
+
         System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\geckodriver.exe");
-        // mvn clean test -Dgeekbrains_username=USER -Dgeekbrains_password=PASS
-        //Student-12    31e146f2be
-//        USERNAME = System.getProperty("geekbrains_username", System.getenv("geekbrains_username"));
-//        PASSWORD = System.getProperty("geekbrains_password", System.getenv("geekbrains_password"));
+
+
         USERNAME = "Student-12";
         PASSWORD = "31e146f2be";
     }
 
     @BeforeEach
-    public void setupTest() throws MalformedURLException {
-        // Используем Selenoid вместо FirefoxDriver
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName("gecko");
-        capabilities.setVersion("latest");
-        capabilities.setCapability("enableVNC", true);
+    public void setupTest() {
 
-        RemoteWebDriver remoteWebDriver = new RemoteWebDriver(
-                URI.create("http://localhost:4444/wd/hub").toURL(), capabilities);
 
-        driver = new Augmenter().augment(remoteWebDriver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         // Растягиваем окно браузера на весь экран
         driver.manage().window().maximize();
