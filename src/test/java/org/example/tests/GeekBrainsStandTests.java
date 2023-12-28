@@ -25,6 +25,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,13 +49,15 @@ public class GeekBrainsStandTests {
 
        Configuration.remote = "http://localhost:4444/wd/hub";
        Configuration.browser = "firefox";
+       Configuration.browserVersion = "120";
+       Map<String, Object> options = new HashMap<>();
+       options.put("enableVNC", true);
+       options.put("enableLog", true);
+       Configuration.browserCapabilities.setCapability("selenoid:options",options);
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName("firefox");
-        capabilities.setVersion("latest");
-        capabilities.setCapability("enableVNC", true);
 
-        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities);
+
+
 
         System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\geckodriver.exe");
 
@@ -66,13 +70,11 @@ public class GeekBrainsStandTests {
     public void setupTest() {
 
 
-        wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        // Растягиваем окно браузера на весь экран
-        driver.manage().window().maximize();
+
         // Навигация на https://test-stand.gb.ru/login
-        driver.get("https://test-stand.gb.ru/login");
+        Selenide.open("https://test-stand.gb.ru/login");
         // Объект созданного Page Object
-        loginPage = new LoginPage(driver, wait);
+        loginPage = Selenide.page(LoginPage.class);
     }
 
 
