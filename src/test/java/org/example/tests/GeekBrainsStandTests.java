@@ -58,7 +58,7 @@ public class GeekBrainsStandTests {
     public void setupTest() throws MalformedURLException {
         // Используем Selenoid вместо FirefoxDriver
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName("gecko"); // Выберите нужный браузер
+        capabilities.setBrowserName("gecko");
         capabilities.setVersion("latest");
         capabilities.setCapability("enableVNC", true);
 
