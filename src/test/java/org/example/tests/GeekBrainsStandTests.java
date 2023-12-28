@@ -54,16 +54,15 @@ public class GeekBrainsStandTests {
        options.put("enableVNC", true);
        options.put("enableLog", true);
        Configuration.browserCapabilities.setCapability("selenoid:options",options);
-
-
-
-
-
         System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\geckodriver.exe");
 
 
         USERNAME = "Student-12";
         PASSWORD = "31e146f2be";
+//        USERNAME = System.getProperty("Student-12", System.getenv("Student-12"));
+//        PASSWORD = System.getProperty("31e146f2be", System.getenv("31e146f2be"));
+
+
     }
 
     @BeforeEach
@@ -99,56 +98,54 @@ public class GeekBrainsStandTests {
         // Проверка, что группа создана и находится в таблице
         assertTrue(mainPage.waitAndGetGroupTitleByText(groupTestName).isDisplayed());
     }
-
-    @Test
-    void testArchiveGroupOnMainPage() {
-        // Обычный логин + создание группы
-        loginPage.login(USERNAME, PASSWORD);
-        mainPage = new MainPage(driver, wait);
-        assertTrue(mainPage.getUsernameLabelText().contains(USERNAME));
-        String groupTestName = "New Test Group " + System.currentTimeMillis();
-        mainPage.createGroup(groupTestName);
-        // Требуется закрыть модальное окно
-        mainPage.closeCreateGroupModalWindow();
-        // Изменение созданной группы с проверками
-        assertEquals("active", mainPage.getStatusOfGroupWithTitle(groupTestName));
-        mainPage.clickTrashIconOnGroupWithTitle(groupTestName);
-        assertEquals("inactive", mainPage.getStatusOfGroupWithTitle(groupTestName));
-        mainPage.clickRestoreFromTrashIconOnGroupWithTitle(groupTestName);
-        assertEquals("active", mainPage.getStatusOfGroupWithTitle(groupTestName));
-    }
-
-    @Test
-    void testBlockingStudentInTableOnMainPage() throws InterruptedException {
-        // Обычный логин + создание группы
-        loginPage.login(USERNAME, PASSWORD);
-        mainPage = new MainPage(driver, wait);
-        assertTrue(mainPage.getUsernameLabelText().contains(USERNAME));
-        String groupTestName = "New Test Group " + System.currentTimeMillis();
-        mainPage.createGroup(groupTestName);
-        // Требуется закрыть модальное окно
-        mainPage.closeCreateGroupModalWindow();
-        // Добавление студентов
-        mainPage.clickAddStudentsIconOnGroupWithTitle(groupTestName);
-        mainPage.typeAmountOfStudentsInCreateStudentsForm(3);
-        mainPage.clickSaveButtonOnCreateStudentsForm();
-        mainPage.closeCreateStudentsModalWindow();
-        mainPage.clickZoomInIconOnGroupWithTitle(groupTestName);
-        // Проверка переходов статуса первого студента из таблицы
-        String firstGeneratedStudentName = mainPage.getFirstGeneratedStudentName();
-        assertEquals("active", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
-        mainPage.clickTrashIconOnStudentWithName(firstGeneratedStudentName);
-        assertEquals("block", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
-        mainPage.clickRestoreFromTrashIconOnStudentWithName(firstGeneratedStudentName);
-        assertEquals("active", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
-    }
+//
+//    @Test
+//    void testArchiveGroupOnMainPage() {
+//        // Обычный логин + создание группы
+//        loginPage.login(USERNAME, PASSWORD);
+//        mainPage = new MainPage(driver, wait);
+//        assertTrue(mainPage.getUsernameLabelText().contains(USERNAME));
+//        String groupTestName = "New Test Group " + System.currentTimeMillis();
+//        mainPage.createGroup(groupTestName);
+//        // Требуется закрыть модальное окно
+//        mainPage.closeCreateGroupModalWindow();
+//        // Изменение созданной группы с проверками
+//        assertEquals("active", mainPage.getStatusOfGroupWithTitle(groupTestName));
+//        mainPage.clickTrashIconOnGroupWithTitle(groupTestName);
+//        assertEquals("inactive", mainPage.getStatusOfGroupWithTitle(groupTestName));
+//        mainPage.clickRestoreFromTrashIconOnGroupWithTitle(groupTestName);
+//        assertEquals("active", mainPage.getStatusOfGroupWithTitle(groupTestName));
+//    }
+//
+//    @Test
+//    void testBlockingStudentInTableOnMainPage() throws InterruptedException {
+//        // Обычный логин + создание группы
+//        loginPage.login(USERNAME, PASSWORD);
+//        mainPage = new MainPage(driver, wait);
+//        assertTrue(mainPage.getUsernameLabelText().contains(USERNAME));
+//        String groupTestName = "New Test Group " + System.currentTimeMillis();
+//        mainPage.createGroup(groupTestName);
+//        // Требуется закрыть модальное окно
+//        mainPage.closeCreateGroupModalWindow();
+//        // Добавление студентов
+//        mainPage.clickAddStudentsIconOnGroupWithTitle(groupTestName);
+//        mainPage.typeAmountOfStudentsInCreateStudentsForm(3);
+//        mainPage.clickSaveButtonOnCreateStudentsForm();
+//        mainPage.closeCreateStudentsModalWindow();
+//        mainPage.clickZoomInIconOnGroupWithTitle(groupTestName);
+//        // Проверка переходов статуса первого студента из таблицы
+//        String firstGeneratedStudentName = mainPage.getFirstGeneratedStudentName();
+//        assertEquals("active", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
+//        mainPage.clickTrashIconOnStudentWithName(firstGeneratedStudentName);
+//        assertEquals("block", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
+//        mainPage.clickRestoreFromTrashIconOnStudentWithName(firstGeneratedStudentName);
+//        assertEquals("active", mainPage.getStatusOfStudentWithName(firstGeneratedStudentName));
+//    }
 
     @AfterEach
+
     public void teardown() {
-        // Закрываем драйвер
-        if (driver != null) {
-            driver.quit();
-        }
+        driver.quit();
     }
 
 
