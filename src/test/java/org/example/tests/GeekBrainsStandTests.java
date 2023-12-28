@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
+import java.lang.module.Configuration;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -41,6 +42,8 @@ public class GeekBrainsStandTests {
 
     @BeforeAll
     public static void setupClass() {
+//        Configuration.browser = "gecko";
+//        Configuration.remote = "http://localhost:4444/wd/hub";
         // Помещаем в переменные окружения путь до драйвера
         System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\geckodriver.exe");
         // mvn clean test -Dgeekbrains_username=USER -Dgeekbrains_password=PASS
@@ -55,12 +58,12 @@ public class GeekBrainsStandTests {
     public void setupTest() throws MalformedURLException {
         // Используем Selenoid вместо FirefoxDriver
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName("chrome"); // Выберите нужный браузер
+        capabilities.setBrowserName("gecko"); // Выберите нужный браузер
         capabilities.setVersion("latest");
         capabilities.setCapability("enableVNC", true);
 
         RemoteWebDriver remoteWebDriver = new RemoteWebDriver(
-                URI.create("http://selenoid-uri:4444/wd/hub").toURL(), capabilities);
+                URI.create("http://localhost:4444/wd/hub").toURL(), capabilities);
 
         driver = new Augmenter().augment(remoteWebDriver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));

@@ -44,9 +44,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>selenium-selenoid</artifactId>
-            <version>1.1.1</version>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide-selenoid</artifactId>
+            <version>7.0.0</version>
         </dependency>
     </dependencies>
 
